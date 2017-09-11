@@ -181,6 +181,9 @@ def communication():
     driver.find_element_by_id('mask').click()
     driver.find_element_by_id('send').click()
     print "图片发送成功"
+    driver.find_element_by_id('rc_voice_toggle').click()
+
+    global sends,sendTime
     sends=driver.find_elements_by_id('rc_time')
     sendTime=sends[-1].text
     print(u"消息发送时间：%s" %sendTime)
