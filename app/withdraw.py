@@ -90,6 +90,8 @@ logging.info(u"会员当前提现积分为:%s" %tixian)
 
 driver.find_element_by_id('tv_extract').click()     #点击提现
 driver.find_element_by_id('edit_integral').send_keys('100')
+jifen=driver.find_element_by_id('edit_integral').text
+logging.info(u"当前提现积分为:%s" %jifen)
 driver.find_element_by_id('btm_extract').click()
 tv_names=driver.find_elements_by_id('tv_name')
 i=0
@@ -133,7 +135,6 @@ if title==u"我的积分" and float(keyong)==float(keyong1)+100.0 :
     driverWeb.find_element_by_class_name('layui-layer-btn0').click()
     time.sleep(3)
     driverWeb.find_element_by_class_name('layui-layer-btn0').click()
-    driverWeb.close()
     time.sleep(6)
 else:
     logging.info(u'提现异常')
@@ -149,7 +150,7 @@ tixian=driver.find_element_by_id('tv_integral2').text
 logging.info(u"审核不通过，会员当前提现积分为:%s" %tixian)
 
 title=driver.find_element_by_id('titlebar_text').text
-if title==u"我的积分" and float(keyong)==float(keyong2) :
+if title==u"我的积分" and float(keyong)==float(keyong1)+100.0 :
     logging.info(u'积分退回成功')
 else:
     logging.info(u'提现异常')
