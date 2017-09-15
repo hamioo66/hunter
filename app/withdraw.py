@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 #我的收入提现功能
 import os,time
-import logging
+import logging,random
 from appium import webdriver
 
 #-------------------------------------------------------------------------------------------start
@@ -81,17 +81,23 @@ layouts[1].click()
 #获取当前会员可用积分
 keyong=driver.find_element_by_id('tv_integral').text
 logging.info(u"会员当前可用积分为:%s" %keyong)
+kyList=[]
+kyList.append(keyong)
+zKeyong=int(kyList[0].split('.')[0])
+#print zKeyong
 #获取当前会员待用积分
 daiyong=driver.find_element_by_id('tv_integral1').text
 logging.info(u"会员当前待用积分为:%s" %daiyong)
 #获取当前会员提现积分
 tixian=driver.find_element_by_id('tv_integral2').text
 logging.info(u"会员当前提现积分为:%s" %tixian)
+randomJf=str(random.randrange(100,zKeyong))
 
 driver.find_element_by_id('tv_extract').click()     #点击提现
-driver.find_element_by_id('edit_integral').send_keys('100')
-jifen=driver.find_element_by_id('edit_integral').text
-logging.info(u"当前提现积分为:%s" %jifen)
+driver.find_element_by_id('edit_integral').send_keys(randomJf)
+print(u"自动生成的提现金额为：%s" %randomJf)
+jifen = driver.find_element_by_id('edit_integral').text
+logging.info(u"当前提现积分为:%s" % jifen)
 driver.find_element_by_id('btm_extract').click()
 tv_names=driver.find_elements_by_id('tv_name')
 i=0
@@ -106,9 +112,23 @@ title=driver.find_element_by_id('titlebar_text').text
 #print type(float(keyong))
 #print type(float(keyong1))
 #print float(keyong)==float(keyong1)+100.0
-if title==u"我的积分" and float(keyong)==float(keyong1)+100.0 :
+if title==u"我的积分" and float(keyong)==float(keyong1)+float(randomJf) :
     logging.info(u'提现申请成功')
-    time.sleep(6)
+    #点击提现积分，查看积分明细
+    driver.find_element_by_id('layout_2').click()
+    # 获取第一条积分明细的订单号
+    odernos = driver.find_elements_by_id('tv_oderno')
+    odernum = odernos[1].text
+    # 获取提现积分
+    jfs = driver.find_elements_by_id('tv_jf')
+    jf = jfs[1].text
+    # 获取时间
+    times = driver.find_elements_by_id('tv_time')
+    time = times[1].text
+    # 获取积分明细类型
+    types = driver.find_elements_by_id('tv_type')
+    type = types[1].text
+
     #后台验证
     from selenium import webdriver
     driverWeb=webdriver.Firefox()
@@ -136,6 +156,9 @@ if title==u"我的积分" and float(keyong)==float(keyong1)+100.0 :
     time.sleep(3)
     driverWeb.find_element_by_class_name('layui-layer-btn0').click()
     time.sleep(6)
+    #根据体现订单号到后台查询订单
+    driverWeb.find_element_by_id('orderNo').send_keys(odernum)
+    driverWeb.find_element_by_xpath('//*[@id="queryForm"]/div/table/tbody/tr[2]/td[2]/input[1]').click()
 else:
     logging.info(u'提现异常')
 #提现申请审核不通过
@@ -150,11 +173,14 @@ tixian=driver.find_element_by_id('tv_integral2').text
 logging.info(u"审核不通过，会员当前提现积分为:%s" %tixian)
 
 title=driver.find_element_by_id('titlebar_text').text
-if title==u"我的积分" and float(keyong)==float(keyong1)+100.0 :
+if title==u"我的积分" and float(keyong)==float(keyong1)+float(randomJf):
     logging.info(u'积分退回成功')
 else:
     logging.info(u'提现异常')
 time.sleep(6)
+
+
+
 
 
 
