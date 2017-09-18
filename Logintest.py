@@ -16,7 +16,7 @@ db.close()
 
 
 def login():
-    user_file=open('../text/user_info.txt','r')
+    user_file=open('text/user_info.txt','r')
     values=user_file.readlines()
     user_file.close()
     i=[]
@@ -26,8 +26,8 @@ def login():
     base_url = 'http://123.206.57.62:7000'
     driver1.get(base_url)
     driver1.maximize_window()
-    username=i[1].split(',')[0]
-    password=i[1].split(',')[1]
+    username=i[3].split(',')[0]
+    password=i[3].split(',')[1]
     print("用户名是:%s" %username)
     print("密码是:%s" %password)
     #调用登陆方法
@@ -39,15 +39,15 @@ def login():
 # 资讯管理添加资讯
 def addNews():
     driver1.find_element_by_xpath("//*[@id='accordion_a']/li[2]/div").click()
-    time.sleep(6)
+    time.sleep(3)
     driver1.find_element_by_xpath("//*[@id='accordion_a']/li[2]/dl/dd/a").click()
-    time.sleep(6)
+    time.sleep(3)
     #iframe = driver1.find_element_by_class_name('iframeBox')
     frames=driver1.find_elements_by_tag_name('iframe')
     driver1.switch_to.frame(frames[-1])
     time.sleep(3)
     driver1.find_element_by_class_name('js_addLabour').click()
-    time.sleep(6)
+    time.sleep(3)
     driver1.switch_to.frame(driver1.find_element_by_id('layui-layer-iframe1'))
     driver1.find_element_by_id('title0').send_keys(u"测试title"+str(random.randint(0,100)))
     driver1.find_element_by_class_name('dropdown-toggle').click()
@@ -58,12 +58,18 @@ def addNews():
     time.sleep(3)
     editFrame=driver1.find_element_by_class_name('ke-edit-iframe')
     driver1.switch_to.frame(editFrame)
+    driver1.find_element_by_class_name('ke-content').click()
     driver1.find_element_by_class_name('ke-content').send_keys(u"如果说你是海上的烟火我是浪花的泡沫某一刻你的光照亮了我如果说你是遥远的星河耀眼得让人想哭我是追逐着你的眼眸总在孤单时候眺望夜空我可以跟在你身后像影子追着光梦游我可以等在这路口")
     time.sleep(3)
     driver1.switch_to.parent_frame()
+    #用google浏览器驱动解决不下滑查找元素
+    target=driver1.find_element_by_class_name('submit')
+    driver1.execute_script("argument[0].scrolltoView();",target)
+    #火狐驱动直接找到元素
     driver1.find_element_by_class_name('submit').click()
-    driver1.find_element_by_class_name('layui-layer-dialog')
-    driver1.find_element_by_id('layui-layer-btn0').click()
+    time.sleep(3)
+    driver1.find_element_by_id('layui-layer1')
+    driver1.find_element_by_class_name('layui-layer-btn-c').click()
 
 
 #系统管理（添加资讯分类）
@@ -92,7 +98,8 @@ def main():
     login()
     time.sleep(6)
     #调用添加资讯分类
-    addNewsType()
+    #addNewsType()
+    addNews()
     time.sleep(6)
 
-#main()
+main()
