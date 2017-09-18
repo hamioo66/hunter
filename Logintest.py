@@ -99,6 +99,7 @@ def main():
     time.sleep(6)
     #调用添加资讯分类
     #addNewsType()
+    #添加资讯
     addNews()
     time.sleep(6)
 
