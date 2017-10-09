@@ -3,7 +3,7 @@ from selenium import webdriver
 import MySQLdb
 import public,time,random
 #读取user_info.txt文件
-driver1 = webdriver.Firefox()
+
 
 #链接数据库
 db=MySQLdb.connect("123.206.66.110","dev-test","123456","orion_test")
@@ -16,6 +16,8 @@ db.close()
 
 
 def login():
+    global driver1
+    driver1= webdriver.Firefox()
     user_file=open('text/user_info.txt','r')
     values=user_file.readlines()
     user_file.close()
@@ -103,4 +105,4 @@ def main():
     addNews()
     time.sleep(6)
 
-main()
+#main()
